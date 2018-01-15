@@ -26,6 +26,16 @@ class App extends Component {
      } );
   }
 
+  nameChangedHandler = (event) => {
+    this.setState( {
+      persons: [
+        { name: 'Max', age: 28 },
+        { name: event.target.value, age: 29 },
+        { name: "Stephanie", age: 26 },
+      ]
+    } );
+  }
+
   render() {
     return (
       <div className="App">
@@ -41,7 +51,8 @@ class App extends Component {
           age={ this.state.persons[1].age }
           // .bind-dal is at lehet adni az argumentumot. Ez standard javascript megoldas, amivel a this problematikat is meg lehet oldani.
           // Ez a preferalt megoldas
-          click={ this.switchNameHandler.bind(this, "Max!") }>
+          click={ this.switchNameHandler.bind(this, "Max!") }
+          changed={ this.nameChangedHandler }>
             My Hobbies: Racing
         </Person>
         <Person 
