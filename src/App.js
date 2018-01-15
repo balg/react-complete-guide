@@ -8,13 +8,22 @@ class App extends Component {
       { name: "Max", age: 28 },
       { name: "Manu", age: 29 },
       { name: "Stephanie", age: 26 },
-    ]
+    ],
+    otherState: 'some other value'
   }
 
   //konvencio: camelcase + Olyan method, amit nem fogsz explicit hivni, hanem event handlerkent hasznalod (pl buttonra akasztod)
   // annak a neve Handler-re vegzodjon
   switchNameHandler = () => {
-     console.log('Klikk!');
+     // console.log('Klikk!');
+     // Na igy nem jo, ettol nem fog frissulni a UI: this.state.persons[0].name = "Bela";
+     this.setState( {
+        persons: [
+          { name: "Bela", age: 28 },
+          { name: "Manu", age: 29 },
+          { name: "Stephanie", age: 27 },
+        ]
+     } );
   }
 
   render() {
