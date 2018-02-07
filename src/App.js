@@ -13,18 +13,10 @@ class App extends Component {
     showPersons: false,
   }
 
-  //konvencio: camelcase + Olyan method, amit nem fogsz explicit hivni, hanem event handlerkent hasznalod (pl buttonra akasztod)
-  // annak a neve Handler-re vegzodjon
-  switchNameHandler = ( newName ) => {
-     // console.log('Klikk!');
-     // Na igy nem jo, ettol nem fog frissulni a UI: this.state.persons[0].name = "Bela";
-     this.setState( {
-        persons: [
-          { name: newName, age: 28 },
-          { name: "Manu", age: 29 },
-          { name: "Stephanie", age: 27 },
-        ]
-     } );
+  deletePersonHandler = ( personIndex ) => {
+    const persons = this.state.persons;
+    persons.splice(personIndex, 1);
+    this.setState({persons: persons});
   }
 
   nameChangedHandler = (event) => {
@@ -57,8 +49,11 @@ class App extends Component {
     if ( this.state.showPersons ) {
       persons = (
         <div>
-          {this.state.persons.map( person => {
-            return <Person name={person.name} age={person.age} />
+          {this.state.persons.map( (person, index) => {
+            return <Person 
+              name={person.name}
+              age={person.age} 
+              click={() => this.deletePersonHandler(index)} />
           } )}
         </div>
       );
@@ -68,7 +63,6 @@ class App extends Component {
       <div className="App">
         <h1>Hi, I'm a React App</h1>
         <p>This is just a test.</p>
-        {/* Igy nem ref alapjan adod at, hanem anonim fv-t adsz az onClicknek *amiben* meghivod a switchNameHandler-t. Igy kaphat argumentumot is. Max azt mondja, hogy bizonyos App meret felett ez nem tul hatekony (tul sok re-render vagy ilyesmi) */}
         <button 
           style={ style }
           onClick={ this.togglePersonsHandler }>Toggle Persons</button>
