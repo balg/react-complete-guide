@@ -14,7 +14,13 @@ class App extends Component {
   }
 
   deletePersonHandler = ( personIndex ) => {
-    const persons = this.state.persons;
+    //Mivel referencia alapu atadas van, mellekhatasai lehetnek, ha direktben a this.state.persons-t piszkaljuk.
+    //A state adatait kozvetlenul ne modositsuk, hanem csinaljunk masolatot, azon dolgozunk, majd setState-tel vissza.
+    //Max azt mondja: mukodik, de kiszamithatatlan. A kovetendo megoldas, ha atmasoljuk egy masik array-be.
+    //Erre van a slice (arg-ok nelkul az eredeti masolatat adja vissza) vagy a ... operator egy array def-en belul, ami
+    //nagyjabol annyit jelent: csinalj egy array-t ennek az array-nek a darabjaibol
+    //const persons = this.state.persons.slice();
+    const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({persons: persons});
   }
