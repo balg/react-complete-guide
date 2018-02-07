@@ -9,7 +9,8 @@ class App extends Component {
       { name: "Manu", age: 29 },
       { name: "Stephanie", age: 26 },
     ],
-    otherState: 'some other value'
+    otherState: 'some other value',
+    showPersons: false,
   }
 
   //konvencio: camelcase + Olyan method, amit nem fogsz explicit hivni, hanem event handlerkent hasznalod (pl buttonra akasztod)
@@ -36,6 +37,11 @@ class App extends Component {
     } );
   }
 
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState( {showPersons: !doesShow} );
+  }
+
   render() {
 
     const style = {
@@ -53,22 +59,28 @@ class App extends Component {
         {/* Igy nem ref alapjan adod at, hanem anonim fv-t adsz az onClicknek *amiben* meghivod a switchNameHandler-t. Igy kaphat argumentumot is. Max azt mondja, hogy bizonyos App meret felett ez nem tul hatekony (tul sok re-render vagy ilyesmi) */}
         <button 
           style={ style }
-          onClick={ () => this.switchNameHandler("Maximilian!!") }>Switch Name</button>
-        <Person 
-          name={ this.state.persons[0].name }
-          age={ this.state.persons[0].age } />
-        <Person 
-          name={ this.state.persons[1].name } 
-          age={ this.state.persons[1].age }
-          // .bind-dal is at lehet adni az argumentumot. Ez standard javascript megoldas, amivel a this problematikat is meg lehet oldani.
-          // Ez a preferalt megoldas
-          click={ this.switchNameHandler.bind(this, "Max!") }
-          changed={ this.nameChangedHandler }>
-            My Hobbies: Racing
-        </Person>
-        <Person 
-          name={ this.state.persons[2].name } 
-          age={ this.state.persons[2].age } />
+          onClick={ this.togglePersonsHandler }>Toggle Persons</button>
+        {
+          this.state.showPersons ? 
+            <div>
+              <Person 
+                name={ this.state.persons[0].name }
+                age={ this.state.persons[0].age } />
+              <Person 
+                name={ this.state.persons[1].name } 
+                age={ this.state.persons[1].age }
+                // .bind-dal is at lehet adni az argumentumot. Ez standard javascript megoldas, amivel a this problematikat is meg lehet oldani.
+                // Ez a preferalt megoldas
+                click={ this.switchNameHandler.bind(this, "Max!") }
+                changed={ this.nameChangedHandler }>
+                  My Hobbies: Racing
+              </Person>
+              <Person 
+                name={ this.state.persons[2].name } 
+                age={ this.state.persons[2].age } />
+            </div>
+          : null
+        }
       </div>
     );
   }
