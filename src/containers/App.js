@@ -17,6 +17,7 @@ class App extends Component {
       ],
       showPersons: false,
       showCockpit: true,
+      changeCounter: 0,
     }
   }
 
@@ -63,9 +64,10 @@ class App extends Component {
       name: event.target.value,
     })
 
-    this.setState({
-      persons
-    });
+    this.setState((prevState, props) => ({
+      persons,
+      changeCounter: prevState.changeCounter + 1
+    }));
   }
 
   togglePersonsHandler = () => {
