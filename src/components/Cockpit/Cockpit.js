@@ -4,10 +4,11 @@ import styles from './Cockpit.css';
 const Cockpit = props => {
   useEffect(() => {
     console.log('[Cockpit.js] useEffect');
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       alert('Saved data to cloud!');
     }, 1000);
     return () => {
+      clearTimeout(timer);
       console.log('[Cockpit.js] cleanup work in useEffect');
     }
   }, []); // empty array - The function inside will be executed only when component is (first) rendered and unmounted
