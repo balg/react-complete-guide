@@ -23,3 +23,11 @@
   background-color: lightgreen;
   color: black;
 }
+
+.button.bg-red {
+  background-color: red;
+}
+
+.button.bg-red:hover {
+  background-color: salmon;
+}
