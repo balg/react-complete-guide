@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './Cockpit.css';
 
 const Cockpit = props => {
+  useEffect(() => {
+    console.log('[Cockpit.js] useEffect');
+    setTimeout(() => {
+      alert('Saved data to cloud!');
+    }, 1000);
+    return () => {
+      console.log('[Cockpit.js] cleanup work in useEffect');
+    }
+  }, []); // empty array - The function inside will be executed only when component is (first) rendered and unmounted
+
+  useEffect(() => {
+    console.log('[Cockpit.js] 2nd useEffect');
+    return () => {
+      console.log('[Cockpit.js] cleanup work in 2nd useEffect');
+    }
+  });
+
   const classes = [];
   let btnClasses = [styles.button];
   if (props.persons.length <= 2) {
@@ -16,7 +33,7 @@ const Cockpit = props => {
 
   return (
     <div>
-      <h1>Hi, I'm a React App!</h1>
+      <h1>{props.title}</h1>
       <p className={classes.join(' ')}>Is this really working?</p>
       <button className={btnClasses.join(' ')} onClick={props.btnClicked}>
         Toggle Persons
