@@ -16,10 +16,10 @@ const BurgerIngredient = props => {
   let ingredient = null;
 
   switch (props.type) {
-    case 'bread-bottom':
+    case BurgerIngredientType["BREAD-BOTTOM"]:
       ingredient = <div className={styles.BreadBottom} />;
       break;
-    case 'bread-top':
+    case BurgerIngredientType["BREAD-TOP"]:
       ingredient = (
         <div className={styles.BreadTop}>
           <div className={styles.Seeds1} />
@@ -27,16 +27,16 @@ const BurgerIngredient = props => {
         </div>
       );
       break;
-    case 'meat':
+    case BurgerIngredientType["MEAT"]:
       ingredient = <div className={styles.Meat} />;
       break;
-    case 'cheese':
+    case BurgerIngredientType["CHEESE"]:
       ingredient = <div className={styles.Cheese} />;
       break;
-    case 'salad':
+    case BurgerIngredientType["SALAD"]:
       ingredient = <div className={styles.Salad} />;
       break;
-    case 'bacon':
+    case BurgerIngredientType["BACON"]:
       ingredient = <div className={styles.Bacon} />;
       break;
     default:
