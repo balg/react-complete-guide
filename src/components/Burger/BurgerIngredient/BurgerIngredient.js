@@ -12,6 +12,15 @@ export const BurgerIngredientType = {
   'SALAD': 'salad',
 }
 
+export const BurgerIngredientData = {
+  'bread-bottom': { label: "Bread", price: 0 },
+  'bread-top': { label: "Bread", price: 0 },
+  'meat': { label: "Meat", price: 1.3 },
+  'cheese': { label: "Cheese", price: 0.4 },
+  'bacon': { label: "Bacon", price: 0.7 },
+  'salad': { label: "Salad", price: 0.5 },
+}
+
 const BurgerIngredient = props => {
   let ingredient = null;
 
