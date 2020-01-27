@@ -8,8 +8,8 @@ class BurgerBuilder extends Component {
     ingredients: {
       [BurgerIngredientType.SALAD]: 0,
       [BurgerIngredientType.BACON]: 0,
-      [BurgerIngredientType.CHEESE]: 1,
-      [BurgerIngredientType.MEAT]: 1
+      [BurgerIngredientType.CHEESE]: 0,
+      [BurgerIngredientType.MEAT]: 0
     },
     totalPrice: 4,
   }
@@ -53,6 +53,7 @@ class BurgerBuilder extends Component {
           ingredientAdded={this.addIngredientHandler}
           ingredientRemoved={this.removeIngredientHandler}
           disabled={disabledInfo}
+          price={this.state.totalPrice}
         />
       </>
     );

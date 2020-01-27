@@ -15,6 +15,7 @@ const controls = Object.entries(BurgerIngredientData)
 
 const BuildControls = props => (
   <div className={styles.buildControls}>
+    <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p>
     {controls.map(c => (
       <BuildControl
         key={c.label}
