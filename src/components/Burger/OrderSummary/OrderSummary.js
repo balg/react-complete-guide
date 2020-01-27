@@ -1,5 +1,6 @@
 import React from 'react';
 import { BurgerIngredientData } from '../BurgerIngredient/BurgerIngredient';
+import Button from '../../UI/Button/Button';
 
 const OrderSummary = props => {
   const ingredientSummary = Object.entries(props.ingredients)
@@ -16,7 +17,10 @@ const OrderSummary = props => {
       <ul>
         {ingredientSummary}
       </ul>
+      <p><strong>Total Price: {props.price.toFixed(2)}</strong></p>
       <p>Continue to Checkout?</p>
+      <Button btnType="danger" clicked={props.purchaseCancelled}>CANCEL</Button>
+      <Button btnType="success" clicked={props.purchaseContinued}>CONTINUE</Button>
     </>
   );
 };
