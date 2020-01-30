@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Burger from "../../components/Burger/Burger";
 import BuildControls from "../../components/Burger/BuildControls/BuildControls";
-import { BurgerIngredientType, BurgerIngredientData } from "../../components/Burger/BurgerIngredient/BurgerIngredient";
+import { BurgerIngredientData } from "../../components/Burger/BurgerIngredient/BurgerIngredient";
 import Modal from "../../components/UI/Modal/Modal";
 import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from '../../axios-orders';
@@ -10,16 +10,21 @@ import Spinner from "../../components/UI/Spinner/Spinner";
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: {
-      [BurgerIngredientType.SALAD]: 0,
-      [BurgerIngredientType.BACON]: 0,
-      [BurgerIngredientType.CHEESE]: 0,
-      [BurgerIngredientType.MEAT]: 0
-    },
+    ingredients: null,
     totalPrice: 4,
     purchaseable: false,
     purchasing: false,
     loading: false,
+    error: false,
+  }
+
+  componentDidMount() {
+    axios.get('/ingredients.json')
+      .then(response => {
+        this.setState({ ingredients: response.data })
+      }).catch(error => {
+        this.setState({ error: true });
+      });
   }
 
   updatePurchaseState = () => {
@@ -76,7 +81,7 @@ class BurgerBuilder extends Component {
       },
       deliveryMethod: 'fastest',
     }
-    axios.post('/orders', order)
+    axios.post('/orders.json', order)
       .then(response => {
         this.setState({ loading: false, purchasing: false });
       })
@@ -94,12 +99,32 @@ class BurgerBuilder extends Component {
         disabledInfo[key] = disabledInfo[key] <= 0
       }
     }
-    let orderSummary = <OrderSummary
-      ingredients={this.state.ingredients}
-      price={this.state.totalPrice}
-      purchaseCancelled={this.purchaseCancelHandler}
-      purchaseContinued={this.purchaseContinueHandler}
-    />
+
+    let orderSummary = null;
+    let burger = this.state.error
+      ? <p>Ingredients could not be loaded.</p>
+      : <Spinner />
+    if (this.state.ingredients) {
+      burger = (
+        <>
+          <Burger ingredients={this.state.ingredients} />
+          <BuildControls
+            ingredientAdded={this.addIngredientHandler}
+            ingredientRemoved={this.removeIngredientHandler}
+            disabled={disabledInfo}
+            purchaseable={this.state.purchaseable}
+            price={this.state.totalPrice}
+            ordered={this.purchaseHandler}
+          />
+        </>
+      );
+      orderSummary = <OrderSummary
+        ingredients={this.state.ingredients}
+        price={this.state.totalPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler}
+      />
+    }
     if (this.state.loading) {
       orderSummary = <Spinner />
     }
@@ -111,15 +136,7 @@ class BurgerBuilder extends Component {
         >
           {orderSummary}
         </Modal>
-        <Burger ingredients={this.state.ingredients} />
-        <BuildControls
-          ingredientAdded={this.addIngredientHandler}
-          ingredientRemoved={this.removeIngredientHandler}
-          disabled={disabledInfo}
-          purchaseable={this.state.purchaseable}
-          price={this.state.totalPrice}
-          ordered={this.purchaseHandler}
-        />
+        {burger}
       </>
     );
   }
