@@ -9,7 +9,6 @@ const Navigation = props => (
       <li>
         <NavLink
           to="/posts"
-          exact
           activeClassName="active"
         >
           Posts
