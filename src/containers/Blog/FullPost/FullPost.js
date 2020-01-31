@@ -11,6 +11,10 @@ class FullPost extends Component {
     componentDidMount() {
         console.log(this.props);
         const postId = this.props.match.params.id;
+        const query = new URLSearchParams(this.props.location.search);
+        for (const param of query.entries()) {
+            console.log(param);
+        }
         if (postId) {
             axios.get(`/posts/${postId}`)
                 .then(response => {
