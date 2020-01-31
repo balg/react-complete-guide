@@ -9,19 +9,24 @@ class FullPost extends Component {
     };
 
     componentDidMount() {
-        console.log(this.props);
+        this.loadData();
+    }
+
+    componentDidUpdate() {
+        this.loadData();
+    }
+
+    loadData = () => {
         const postId = this.props.match.params.id;
-        const query = new URLSearchParams(this.props.location.search);
-        for (const param of query.entries()) {
-            console.log(param);
-        }
         if (postId) {
-            axios.get(`/posts/${postId}`)
-                .then(response => {
-                    this.setState({
-                        loadedPost: response.data,
-                    });
-                })
+            if (!this.state.loadedPost || (this.state.loadedPost.id !== parseInt(postId, 10))) {
+                axios.get(`/posts/${postId}`)
+                    .then(response => {
+                        this.setState({
+                            loadedPost: response.data,
+                        });
+                    })
+            }
         }
     }
 

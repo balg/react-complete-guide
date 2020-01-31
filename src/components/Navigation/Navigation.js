@@ -8,11 +8,11 @@ const Navigation = props => (
     <ul>
       <li>
         <NavLink
-          to="/"
+          to="/posts"
           exact
           activeClassName="active"
         >
-          Home
+          Posts
         </NavLink>
       </li>
       <li><NavLink to={{
