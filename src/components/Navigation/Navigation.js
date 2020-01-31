@@ -1,17 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import './Navigation.css';
 
 const Navigation = props => (
   <nav className="navigation">
     <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to={{
+      <li>
+        <NavLink
+          to="/"
+          exact
+          activeClassName="active"
+        >
+          Home
+        </NavLink>
+      </li>
+      <li><NavLink to={{
         pathname: '/new-post',
         hash: '#submit',
         search: '?quick-submit=true'
-      }}>New Post</Link></li>
+      }}>New Post</NavLink></li>
     </ul>
   </nav>
 );

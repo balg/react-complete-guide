@@ -17,6 +17,7 @@
 }
 
 .navigation a:hover,
-.navigation a:active {
+.navigation a:active,
+.navigation a.active {
   color: coral;
 }
