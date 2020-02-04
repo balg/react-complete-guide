@@ -8,10 +8,6 @@
   border: 1px solid #eee;
 }
 
-.input{
-  display: block;
-}
-
 @media (min-width: 600px) {
   .contactData {
     width: 500px;
