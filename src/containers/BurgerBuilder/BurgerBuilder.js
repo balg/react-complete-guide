@@ -24,7 +24,6 @@ class BurgerBuilder extends Component {
     //   }).catch(error => {
     //     this.setState({ error: true });
     //   });
-    // Testing the commit from the new machine
   }
 
   updatePurchaseState = () => {
