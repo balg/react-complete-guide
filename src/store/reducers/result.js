@@ -1,32 +1,44 @@
-import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from "../actions/actionTypes";
+import { updateObject } from "../utility";
 
 const initialState = {
   results: []
-}
+};
+
+const deleteResult = (state, action) => {
+  const { resultId } = action;
+  const updatedResults = state.results.filter(({ id }) => id !== resultId);
+  return updateObject(state, {
+    results: updatedResults
+  });
+};
+
+const storeResult = (state, action) => {
+  const { result } = action;
+  return updateObject(state, {
+    results: [
+      ...state.results,
+      {
+        id: new Date(),
+        value: result
+      }
+    ]
+  });
+};
 
 const reducer = (state = initialState, action) => {
-  console.log('[Result Reducer]', action);
-  const { type, resultId, result } = action;
-  
+  console.log("[Result Reducer]", action);
+  const { type } = action;
+
   switch (type) {
     case actionTypes.STORE_RESULT:
-      return {
-        ...state,
-        results: [...state.results, {
-          id: new Date(),
-          value: result,
-        }],
-      }
+      return storeResult(state, action);
     case actionTypes.DELETE_RESULT:
-      const updatedResults = state.results.filter(({ id }) => id !== resultId);
-      return {
-        ...state,
-        results: updatedResults
-      }
+      return deleteResult(state, action);
     default:
       break;
   }
   return state;
-}
+};
 
 export default reducer;
