@@ -27,10 +27,19 @@ export const subtract = value => {
     value
   };
 };
-export const storeResult = result => {
+// sync action creator. This will reach the reducer
+export const saveResult = result => {
   return {
     type: STORE_RESULT,
     result
+  };
+};
+// async action creator handled by thunk.
+export const storeResult = result => {
+  return dispatch => {
+    setTimeout(() => {
+      dispatch(saveResult(result));
+    }, 2000);
   };
 };
 export const deleteResult = resultId => {
