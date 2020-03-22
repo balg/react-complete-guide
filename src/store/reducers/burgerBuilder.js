@@ -1,5 +1,5 @@
-import * as actionTypes from './actions';
-import { BurgerIngredientData } from '../components/Burger/BurgerIngredient/BurgerIngredient';
+import * as actionTypes from '../actions/actionTypes';
+import { BurgerIngredientData } from '../../components/Burger/BurgerIngredient/BurgerIngredient';
 
 const initialState = {
   ingredients: {
