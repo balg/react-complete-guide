@@ -9,8 +9,11 @@ export const saveResult = result => {
 };
 // async action creator handled by thunk.
 export const storeResult = result => {
-  return dispatch => {
+  return (dispatch, getState) => {
     setTimeout(() => {
+      // Don't overuse getState. If you need some data rather pass it as an arg
+      // const oldCounter = getState().ctr.counter;
+      // console.log("oldCounter", oldCounter)
       dispatch(saveResult(result));
     }, 2000);
   };
