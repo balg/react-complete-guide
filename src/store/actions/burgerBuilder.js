@@ -1,11 +1,5 @@
 import * as actionTypes from "./actionTypes";
-
-export const init = ingredients => {
-  return {
-    type: actionTypes.INIT,
-    ingredients
-  }
-}
+import axios from "../../axios-orders";
 
 export const addIngredient = ingrdntName => {
   return {
@@ -18,5 +12,30 @@ export const removeIngredient = ingrdntName => {
   return {
     type: actionTypes.REMOVE_INGREDIENT,
     ingrdntName
+  };
+};
+
+const setIngredients = ingredients => {
+  return {
+    type: actionTypes.SET_INGREDIENTS,
+    ingredients
+  };
+};
+
+const fetchIngredientsFailed = () => ({
+  type: actionTypes.FETCH_INGREDIENTS_FAILED
+});
+
+// Thunk
+export const initIngredients = () => {
+  return dispatch => {
+    axios
+      .get("/ingredients.json")
+      .then(response => {
+        dispatch(setIngredients(response.data));
+      })
+      .catch(error => {
+        dispatch(fetchIngredientsFailed());
+      });
   };
 };
