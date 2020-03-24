@@ -18,6 +18,7 @@ const setIngredients = (state, action) => {
   return {
     ...state,
     ingredients,
+    totalPrice: 4,
     error: false
   };
 };
