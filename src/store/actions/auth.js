@@ -18,9 +18,14 @@ export const authFail = error => ({
   error
 });
 
-export const logout = () => ({
-  type: actionTypes.AUTH_LOGOUT
-});
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("expirationDate");
+  localStorage.removeItem("userId");
+  return {
+    type: actionTypes.AUTH_LOGOUT
+  };
+};
 
 export const checkAuthTimeout = expirationTime => dispatch => {
   setTimeout(() => {
@@ -45,10 +50,17 @@ export const auth = (email, password, isSignup) => {
     const params = {
       key: FIREBASE_API_KEY
     };
+    const storeToken = ({ idToken, expiresIn, localId }) => {
+      const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+      localStorage.setItem("token", idToken);
+      localStorage.setItem("expirationDate", expirationDate);
+      localStorage.setItem("userId", localId);
+    };
     axios
       .post(url, authData, { params })
       .then(response => {
         console.log(response);
+        storeToken(response.data);
         dispatch(authSuccess(response.data));
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
@@ -59,7 +71,34 @@ export const auth = (email, password, isSignup) => {
   };
 };
 
-export const setAuthRedirectPath = (path) => ({
+export const setAuthRedirectPath = path => ({
   type: actionTypes.SET_AUTH_REDIRECT_PATH,
   path
-})
+});
+
+export const authCheckState = () => {
+  return dispatch => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      dispatch(logout());
+    } else {
+      const expirationDate = new Date(localStorage.getItem("expirationDate"));
+      if (expirationDate > new Date()) {
+        const userId = localStorage.getItem("userId");
+        dispatch(
+          authSuccess({
+            idToken: token,
+            localId: userId
+          })
+        );
+        dispatch(
+          checkAuthTimeout(
+            (expirationDate.getTime() - new Date().getTime()) / 1000
+          )
+        );
+      } else {
+        dispatch(logout());
+      }
+    }
+  };
+};
