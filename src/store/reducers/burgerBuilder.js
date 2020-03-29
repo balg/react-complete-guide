@@ -10,7 +10,8 @@ const initialState = {
   // },
   ingredients: null,
   totalPrice: 4,
-  error: false
+  error: false,
+  building: false,
 };
 
 const addIngredient = (state, action) => {
@@ -21,7 +22,8 @@ const addIngredient = (state, action) => {
       ...state.ingredients,
       [ingrdntName]: state.ingredients[ingrdntName] + 1
     },
-    totalPrice: state.totalPrice + BurgerIngredientData[ingrdntName].price
+    totalPrice: state.totalPrice + BurgerIngredientData[ingrdntName].price,
+    building: true
   };
 };
 
@@ -33,7 +35,8 @@ const removeIngredient = (state, action) => {
       ...state.ingredients,
       [ingrdntName]: state.ingredients[ingrdntName] - 1
     },
-    totalPrice: state.totalPrice - BurgerIngredientData[ingrdntName].price
+    totalPrice: state.totalPrice - BurgerIngredientData[ingrdntName].price,
+    building: true
   };
 };
 
@@ -43,7 +46,8 @@ const setIngredients = (state, action) => {
     ...state,
     ingredients,
     totalPrice: 4,
-    error: false
+    error: false,
+    building: false
   };
 };
 

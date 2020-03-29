@@ -1,13 +1,18 @@
-import React from 'react';
+import React from "react";
 
-import { BurgerIngredientType, BurgerIngredientData } from '../BurgerIngredient/BurgerIngredient';
-import styles from './BuildControls.module.css';
-import BuildControl from './BuildControl/BuildControl';
+import {
+  BurgerIngredientType,
+  BurgerIngredientData
+} from "../BurgerIngredient/BurgerIngredient";
+import styles from "./BuildControls.module.css";
+import BuildControl from "./BuildControl/BuildControl";
 
 const controls = Object.entries(BurgerIngredientData)
-  .filter(([type, data]) =>
-    type !== BurgerIngredientType["BREAD-BOTTOM"] &&
-    type !== BurgerIngredientType["BREAD-TOP"])
+  .filter(
+    ([type, data]) =>
+      type !== BurgerIngredientType["BREAD-BOTTOM"] &&
+      type !== BurgerIngredientType["BREAD-TOP"]
+  )
   .map(([type, data]) => ({
     type,
     label: data.label
@@ -15,7 +20,9 @@ const controls = Object.entries(BurgerIngredientData)
 
 const BuildControls = props => (
   <div className={styles.buildControls}>
-    <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p>
+    <p>
+      Current Price: <strong>{props.price.toFixed(2)}</strong>
+    </p>
     {controls.map(c => (
       <BuildControl
         key={c.label}
@@ -30,7 +37,7 @@ const BuildControls = props => (
       disabled={!props.purchaseable}
       onClick={props.ordered}
     >
-      ORDER NOW
+      {props.isAuthenticated ? "ORDER NOW" : "SIGN IN TO ORDER"}
     </button>
   </div>
 );
