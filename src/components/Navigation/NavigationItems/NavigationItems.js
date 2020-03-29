@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import styles from './NavigationItems.module.css';
-import NavigationItem from './NavigationItem/NavigationItem';
+import styles from "./NavigationItems.module.css";
+import NavigationItem from "./NavigationItem/NavigationItem";
 
 const NavigationItems = props => (
   <nav className={styles.navigationItems}>
@@ -9,12 +9,12 @@ const NavigationItems = props => (
       <NavigationItem link="/" exact>
         Burger Builder
       </NavigationItem>
-      <NavigationItem link="/orders">
-        Orders
-      </NavigationItem>
-      <NavigationItem link="/auth">
-        Authenticate
-      </NavigationItem>
+      <NavigationItem link="/orders">Orders</NavigationItem>
+      {props.isAuthenticated ? (
+        <NavigationItem link="/logout">Logout</NavigationItem>
+      ) : (
+        <NavigationItem link="/auth">Authenticate</NavigationItem>
+      )}
     </ul>
   </nav>
 );
