@@ -8,6 +8,7 @@ import Spinner from "../../../components/UI/Spinner/Spinner";
 import Input from "../../../components/UI/Input/Input";
 import withErrorHandler from "../../../hoc/withErrorHandler/withErrorHandler";
 import * as actions from "../../../store/actions";
+import { checkValidity } from "../../../shared/utility";
 
 class ContactData extends Component {
   state = {
@@ -16,87 +17,87 @@ class ContactData extends Component {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Your Name"
+          placeholder: "Your Name",
         },
         value: "",
         label: "Your Name",
         validation: {
-          required: true
+          required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       street: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Street"
+          placeholder: "Street",
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       zipCode: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "ZIP Code"
+          placeholder: "ZIP Code",
         },
         value: "",
         validation: {
           required: true,
           minLength: 4,
-          maxLength: 4
+          maxLength: 4,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       country: {
         elementType: "input",
         elementConfig: {
           type: "text",
-          placeholder: "Country"
+          placeholder: "Country",
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       email: {
         elementType: "input",
         elementConfig: {
           type: "email",
-          placeholder: "Your E-Mail"
+          placeholder: "Your E-Mail",
         },
         value: "",
         validation: {
-          required: true
+          required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       deliveryMethod: {
         elementType: "select",
         elementConfig: {
           options: [
             { value: "fastest", displayValue: "Fastest" },
-            { value: "cheapest", displayValue: "Cheapest" }
-          ]
+            { value: "cheapest", displayValue: "Cheapest" },
+          ],
         },
         value: "fastest",
         validation: {},
-        valid: true
-      }
+        valid: true,
+      },
     },
-    formIsValid: false
+    formIsValid: false,
   };
 
-  orderHandler = event => {
+  orderHandler = (event) => {
     event.preventDefault();
     const formData = {};
     Object.entries(this.state.orderForm).forEach(
@@ -108,46 +109,25 @@ class ContactData extends Component {
       ingredients: this.props.ingrdnts,
       price: this.props.price,
       orderData: formData,
-      userId: this.props.userId
+      userId: this.props.userId,
     };
     this.props.onOrderBurger(order, this.props.token);
   };
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (!rules) {
-      return true;
-    }
-
-    if (rules.required) {
-      isValid = value.trim() !== "" && isValid;
-    }
-
-    if (rules.minLength) {
-      isValid = value.trim().length >= rules.minLength && isValid;
-    }
-
-    if (rules.maxLength) {
-      isValid = value.trim().length <= rules.maxLength && isValid;
-    }
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, inputId) => {
     const { value } = event.target;
-    this.setState(prevState => {
+    this.setState((prevState) => {
       const orderForm = {
         ...prevState.orderForm,
         [inputId]: {
           ...prevState.orderForm[inputId],
           value,
-          valid: this.checkValidity(
+          valid: checkValidity(
             value,
             prevState.orderForm[inputId].validation
           ),
-          touched: true
-        }
+          touched: true,
+        },
       };
 
       const formIsValid = Object.values(orderForm).reduce(
@@ -159,7 +139,7 @@ class ContactData extends Component {
       );
       return {
         orderForm,
-        formIsValid
+        formIsValid,
       };
     });
   };
@@ -170,7 +150,15 @@ class ContactData extends Component {
     ).map(
       ([
         name,
-        { elementType, elementConfig, value, label, validation, valid, touched }
+        {
+          elementType,
+          elementConfig,
+          value,
+          label,
+          validation,
+          valid,
+          touched,
+        },
       ]) => (
         <Input
           key={name}
@@ -181,7 +169,7 @@ class ContactData extends Component {
           invalid={!valid}
           shouldValidate={validation}
           touched={touched}
-          changed={event => this.inputChangedHandler(event, name)}
+          changed={(event) => this.inputChangedHandler(event, name)}
         />
       )
     );
@@ -205,16 +193,16 @@ class ContactData extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   ingrdnts: state.burgerBuilder.ingredients,
   price: state.burgerBuilder.totalPrice,
   loading: state.order.loading,
   token: state.auth.token,
-  userId: state.auth.userId
+  userId: state.auth.userId,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onOrderBurger: (orderData, token) =>
-    dispatch(actions.purchaseBurger(orderData, token))
+    dispatch(actions.purchaseBurger(orderData, token)),
 });
 
 export default connect(
