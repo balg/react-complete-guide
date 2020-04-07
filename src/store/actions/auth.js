@@ -59,7 +59,6 @@ export const auth = (email, password, isSignup) => {
     axios
       .post(url, authData, { params })
       .then(response => {
-        console.log(response);
         storeToken(response.data);
         dispatch(authSuccess(response.data));
         dispatch(checkAuthTimeout(response.data.expiresIn));
