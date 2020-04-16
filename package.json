@@ -1,0 +1,23 @@
+{
+  "name": "react-complete-guide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balg/react-complete-guide.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/balg/react-complete-guide/issues"
+  },
+  "homepage": "https://github.com/balg/react-complete-guide#readme",
+  "devDependencies": {
+    "webpack": "^4.42.1",
+    "webpack-dev-server": "^3.10.3"
+  }
+}
