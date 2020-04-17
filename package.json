@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/balg/react-complete-guide/issues"
   },
-  "homepage": "https://github.com/balg/react-complete-guide#readme"
+  "homepage": "https://github.com/balg/react-complete-guide#readme",
+  "dependencies": {
+    "next": "^9.3.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
 }
