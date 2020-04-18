@@ -1,46 +1,66 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import './List.css';
+import "./List.css";
 
 class List extends Component {
-    state = {
-        items: [1, 2, 3]
-    }
+  state = {
+    items: [
+      {
+        id: 1,
+        name: "Balika",
+      },
+      {
+        id: 2,
+        name: "Virag",
+      },
+      {
+        id: 3,
+        name: "Kleo",
+      },
+    ],
+  };
 
-    addItemHandler = () => {
-        this.setState((prevState) => {
-            return {
-                items: prevState.items.concat(prevState.items.length + 1)
-            };
-        });
-    }
+  addItemHandler = () => {
+    this.setState((prevState) => {
+      return {
+        items: [...prevState.items, {
+            id: Date.now(),
+            name: new Date().toISOString()
+        }],
+      };
+    });
+  };
 
-    removeItemHandler = (selIndex) => {
-        this.setState((prevState) => {
-            return {
-                items: prevState.items.filter((item, index) => index !== selIndex)
-            };
-        });
-    }
+  removeItemHandler = (itemId) => {
+    this.setState((prevState) => {
+      return {
+        items: prevState.items.filter((item) => item.id !== itemId),
+      };
+    });
+  };
 
-    render () {
-        const listItems = this.state.items.map( (item, index) => (
-            <li 
-                key={index}
-                className="ListItem" 
-                onClick={() => this.removeItemHandler(index)}>{item}</li>
-        ) );
+  render() {
+    const listItems = this.state.items.map((item) => (
+      <CSSTransition key={item.id} classNames="fade" timeout={300}>
+        <li className="ListItem" onClick={() => this.removeItemHandler(item.id)}>
+          {item.name}
+        </li>
+      </CSSTransition>
+    ));
 
-        return (
-            <div>
-                <button className="Button" onClick={this.addItemHandler}>Add Item</button>
-                <p>Click Item to Remove.</p>
-                <ul className="List">
-                    {listItems}
-                </ul>
-            </div>
-        );
-    }
+    return (
+      <div>
+        <button className="Button" onClick={this.addItemHandler}>
+          Add Item
+        </button>
+        <p>Click Item to Remove.</p>
+        <TransitionGroup component="ul" className="List">
+          {listItems}
+        </TransitionGroup>
+      </div>
+    );
+  }
 }
 
 export default List;
