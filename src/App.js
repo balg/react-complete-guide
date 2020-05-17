@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect } from "react";
-import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 import Layout from "./containers/Layout/Layout";
 import BurgerBuilder from "./containers/BurgerBuilder/BurgerBuilder";
@@ -12,12 +12,17 @@ const Orders = React.lazy(() => import("./containers/Orders/Orders"));
 const Auth = React.lazy(() => import("./containers/Auth/Auth"));
 
 const App = (props) => {
-  const { onTryAutoSignin } = props;
+  const isAuthenticated = useSelector(state => state.auth.token !== null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    onTryAutoSignin();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    console.log('App did mount.')
+  }, [])
+
+  useEffect(() => {
+    console.log('Dispatch actions.authCheckState().')
+    dispatch(actions.authCheckState())
+  }, [dispatch]);
 
   let routes = (
     <Switch>
@@ -27,7 +32,7 @@ const App = (props) => {
     </Switch>
   );
 
-  if (props.isAuthenticated) {
+  if (isAuthenticated) {
     routes = (
       <Switch>
         <Route path="/checkout" render={(props) => <Checkout {...props} />} />
@@ -49,12 +54,4 @@ const App = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.token !== null,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onTryAutoSignin: () => dispatch(actions.authCheckState()),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default App;
