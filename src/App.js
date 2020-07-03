@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
-import './App.css';
+import React from 'react';
+import { Route } from 'react-router-dom';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <h1>Hi, I'm a React App!</h1>
-      </div>
-    );
-  }
-}
+import Navigation from './components/Nav/Navigation';
+import ProductsPage from './containers/Products';
+import FavoritesPage from './containers/Favorites';
+
+const App = props => {
+  return (
+    <React.Fragment>
+      <Navigation />
+      <main>
+        <Route path="/" component={ProductsPage} exact />
+        <Route path="/favorites" component={FavoritesPage} />
+      </main>
+    </React.Fragment>
+  );
+};
 
 export default App;
