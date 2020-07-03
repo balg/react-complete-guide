@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 
@@ -7,144 +7,136 @@ import Button from "../../components/UI/Button/Button";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import styles from "./Auth.module.css";
 import * as actions from "../../store/actions";
-import { checkValidity } from '../../shared/utility'
+import { checkValidity } from "../../shared/utility";
 
-class Auth extends Component {
-  state = {
-    controls: {
-      email: {
-        elementType: "input",
-        elementConfig: {
-          type: "email",
-          placeholder: "Email Address"
-        },
-        value: "",
-        validation: {
-          required: true,
-          isEmail: true
-        },
-        valid: false,
-        touched: false
-      },
-      password: {
-        elementType: "input",
-        elementConfig: {
-          type: "password",
-          placeholder: "Password"
-        },
-        value: "",
-        validation: {
-          required: true,
-          minLength: 6
-        },
-        valid: false,
-        touched: false
-      }
+const initialControls = {
+  email: {
+    elementType: "input",
+    elementConfig: {
+      type: "email",
+      placeholder: "Email Address",
     },
-    signUp: true
-  };
+    value: "",
+    validation: {
+      required: true,
+      isEmail: true,
+    },
+    valid: false,
+    touched: false,
+  },
+  password: {
+    elementType: "input",
+    elementConfig: {
+      type: "password",
+      placeholder: "Password",
+    },
+    value: "",
+    validation: {
+      required: true,
+      minLength: 6,
+    },
+    valid: false,
+    touched: false,
+  },
+};
 
-  componentDidMount() {
-    if (!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
-      this.props.onSetAuthRedirectPath()
+const Auth = (props) => {
+  const { buildingBurger, authRedirectPath, onSetAuthRedirectPath } = props;
+  
+  const [controls, setControls] = useState(initialControls);
+  const [signUp, setSignUp] = useState(true);
+
+  useEffect(() => {
+    if (!buildingBurger && authRedirectPath !== "/") {
+      onSetAuthRedirectPath();
     }
-  }
+  }, []);
 
-  inputChangedHandler = (event, inputId) => {
-    const { value } = event.target;
-    this.setState(prevState => {
-      const controls = {
-        ...prevState.controls,
+  const inputChangedHandler = (value, inputId) => {
+    setControls((prev) => {
+      const newControls = {
+        ...prev,
         [inputId]: {
-          ...prevState.controls[inputId],
+          ...prev[inputId],
           value,
-          valid: checkValidity(
-            value,
-            prevState.controls[inputId].validation
-          ),
-          touched: true
-        }
+          valid: checkValidity(value, prev[inputId].validation),
+          touched: true,
+        },
       };
 
-      return {
-        controls
-      };
+      return newControls;
     });
   };
 
-  submitHandler = event => {
+  const submitHandler = (event) => {
     event.preventDefault();
-    const { email, password } = this.state.controls;
-    this.props.onAuth(email.value, password.value, this.state.signUp);
+    const { email, password } = controls;
+    props.onAuth(email.value, password.value, signUp);
   };
 
-  switchAuthModeHandler = () => {
-    this.setState(prevState => ({
-      signUp: !prevState.signUp
-    }));
+  const switchAuthModeHandler = () => {
+    setSignUp((prev) => !prev);
   };
 
-  render() {
-    let formElements = Object.entries(
-      this.state.controls
-    ).map(
-      ([
-        name,
-        { elementType, elementConfig, value, label, validation, valid, touched }
-      ]) => (
-        <Input
-          key={name}
-          elementType={elementType}
-          elementConfig={elementConfig}
-          value={value}
-          invalid={!valid}
-          shouldValidate={validation}
-          touched={touched}
-          changed={event => this.inputChangedHandler(event, name)}
-        />
-      )
-    );
+  let formElements = Object.entries(
+    controls
+  ).map(
+    ([
+      name,
+      { elementType, elementConfig, value, label, validation, valid, touched },
+    ]) => (
+      <Input
+        key={name}
+        elementType={elementType}
+        elementConfig={elementConfig}
+        value={value}
+        invalid={!valid}
+        shouldValidate={validation}
+        touched={touched}
+        changed={(event) => inputChangedHandler(event.target.value, name)}
+      />
+    )
+  );
 
-    if (this.props.loading) {
-      formElements = <Spinner />;
-    }
-
-    let errorMessage = null;
-    if (this.props.error) {
-      errorMessage = <p>{this.props.error.message}</p>;
-    }
-
-    if (this.props.isAuthenticated) {
-      return <Redirect to={this.props.authRedirectPath} />;
-    }
-
-    return (
-      <div className={styles.auth}>
-        {errorMessage}
-        <form onSubmit={this.submitHandler}>
-          {formElements}
-          <Button btnType="success">SUBMIT</Button>
-        </form>
-        <Button btnType="danger" clicked={this.switchAuthModeHandler}>
-          switch to {this.state.signUp ? "sign in" : "sign up"}
-        </Button>
-      </div>
-    );
+  if (props.loading) {
+    formElements = <Spinner />;
   }
-}
 
-const mapStateToProps = state => ({
+  let errorMessage = null;
+  if (props.error) {
+    errorMessage = <p>{props.error.message}</p>;
+  }
+
+  if (props.isAuthenticated) {
+    return <Redirect to={authRedirectPath} />;
+  }
+
+  return (
+    <div className={styles.auth}>
+      {errorMessage}
+      <form onSubmit={submitHandler}>
+        {formElements}
+        <Button btnType="success">SUBMIT</Button>
+      </form>
+      <Button btnType="danger" clicked={switchAuthModeHandler}>
+        switch to {signUp ? "sign in" : "sign up"}
+      </Button>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => ({
   loading: state.auth.loading,
   error: state.auth.error,
   isAuthenticated: state.auth.token !== null,
   buildingBurger: state.burgerBuilder.building,
-  authRedirectPath: state.auth.authRedirect
+  authRedirectPath: state.auth.authRedirect,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   onAuth: (email, password, isSignup) =>
     dispatch(actions.auth(email, password, isSignup)),
-  onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
+  onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/")),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
