@@ -9,7 +9,7 @@ const Logout = (props) => {
 
   useEffect(() => {
     onLogout();
-  }, []);
+  }, [ onLogout ]);
 
   if (isAuthenticated) {
     return "Logging you out...";

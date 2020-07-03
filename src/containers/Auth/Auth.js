@@ -50,7 +50,7 @@ const Auth = (props) => {
     if (!buildingBurger && authRedirectPath !== "/") {
       onSetAuthRedirectPath();
     }
-  }, []);
+  }, [buildingBurger, authRedirectPath, onSetAuthRedirectPath]);
 
   const inputChangedHandler = (value, inputId) => {
     setControls((prev) => {
